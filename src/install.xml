@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is part of "Playful Sparkle - Demo admin login" project and subject to the terms
+and conditions defined in file "LICENSE", which is part of this source
+code package and also available on the project page: https://github.com/playfulsparkle/oc3_demo_admin_login.git
+-->
+<modification>
+    <name>Playful Sparkle - Demo admin login</name>
+    <code>ps_demo_admin_login</code>
+    <version>1.0.0</version>
+    <author>Playful Sparkle</author>
+    <link>https://github.com/playfulsparkle/oc3_demo_admin_login.git</link>
+    <file path="admin/controller/common/login.php">
+        <operation>
+            <search><![CDATA[if (($this->request->server['REQUEST_METHOD'] == 'POST')]]></search>
+            <add position="before"><![CDATA[
+                if (isset(
+                    $this->request->get['username'],
+                    $this->request->get['password'],
+                    $this->request->get['redirect']
+                )) {
+                    $ps_config_username = $this->config->get('module_ps_demo_admin_login_username');
+                    $ps_config_password = $this->config->get('module_ps_demo_admin_login_password');
+
+                    $ps_get_username = $this->request->get['username'];
+                    $ps_get_password = $this->request->get['password'];
+                    $ps_get_redirect = str_replace('&amp;', '&', urldecode($this->request->get['redirect']));
+
+                    if ($this->request->server['HTTPS']) {
+                        $ps_server_base = HTTPS_SERVER;
+                    } else {
+                        $ps_server_base = HTTP_SERVER;
+                    }
+
+                    if (
+                        $ps_config_username !== '' &&
+                        $ps_config_password !== '' &&
+                        $ps_get_username === $ps_config_username &&
+                        $ps_get_password === $ps_config_password &&
+                        $ps_get_redirect !== '' &&
+                        stripos($ps_get_redirect, $ps_server_base) === 0
+                    ) {
+                        $this->request->server['REQUEST_METHOD'] = 'POST';
+
+                        $this->request->post['username'] = $ps_get_username;
+                        $this->request->post['password'] = $ps_get_password;
+                        $this->request->post['redirect'] = $ps_get_redirect;
+                    }
+                }
+            ]]></add>
+        </operation>
+    </file>
+    <file path="admin\controller\extension\*\*.php">
+        <operation>
+            <search><![CDATA[$data['breadcrumbs'] = array();]]></search>
+            <add position="before"><![CDATA[
+                $ps_extension_list = array('extension/module/ps_demo_admin_login', 'extension/advertise/google', 'extension/analytics/google', 'extension/captcha/basic', 'extension/captcha/google', 'extension/currency/ecb', 'extension/currency/fixer', 'extension/dashboard/activity', 'extension/dashboard/chart', 'extension/dashboard/customer', 'extension/dashboard/map', 'extension/dashboard/online', 'extension/dashboard/order', 'extension/dashboard/recent', 'extension/dashboard/sale', 'extension/extension/advertise', 'extension/extension/analytics', 'extension/extension/captcha', 'extension/extension/currency', 'extension/extension/dashboard', 'extension/extension/feed', 'extension/extension/fraud', 'extension/extension/menu', 'extension/extension/module', 'extension/extension/payment', 'extension/extension/promotion', 'extension/extension/report', 'extension/extension/shipping', 'extension/extension/theme', 'extension/extension/total', 'extension/feed/google_base', 'extension/feed/google_sitemap', 'extension/fraud/fraudlabspro', 'extension/fraud/ip', 'extension/fraud/maxmind', 'extension/module/account', 'extension/module/amazon_login', 'extension/module/amazon_pay', 'extension/module/banner', 'extension/module/bestseller', 'extension/module/carousel', 'extension/module/category', 'extension/module/featured', 'extension/module/filter', 'extension/module/google_hangouts', 'extension/module/html', 'extension/module/information', 'extension/module/latest', 'extension/module/laybuy_layout', 'extension/module/paypal_smart_button', 'extension/module/pilibaba_button', 'extension/module/pp_braintree_button', 'extension/module/ps_demo_admin_login', 'extension/module/sagepay_direct_cards', 'extension/module/sagepay_server_cards', 'extension/module/slideshow', 'extension/module/special', 'extension/module/store', 'extension/payment/alipay', 'extension/payment/alipay_cross', 'extension/payment/amazon_login_pay', 'extension/payment/authorizenet_aim', 'extension/payment/authorizenet_sim', 'extension/payment/bank_transfer', 'extension/payment/bluepay_hosted', 'extension/payment/bluepay_redirect', 'extension/payment/cardconnect', 'extension/payment/cardinity', 'extension/payment/cheque', 'extension/payment/cod', 'extension/payment/eway', 'extension/payment/firstdata', 'extension/payment/firstdata_remote', 'extension/payment/free_checkout', 'extension/payment/g2apay', 'extension/payment/globalpay', 'extension/payment/globalpay_remote', 'extension/payment/klarna_account', 'extension/payment/klarna_invoice', 'extension/payment/laybuy', 'extension/payment/liqpay', 'extension/payment/nochex', 'extension/payment/opayo', 'extension/payment/paymate', 'extension/payment/paypal', 'extension/payment/paypoint', 'extension/payment/payza', 'extension/payment/perpetual_payments', 'extension/payment/pilibaba', 'extension/payment/realex', 'extension/payment/realex_remote', 'extension/payment/sagepay_direct', 'extension/payment/sagepay_server', 'extension/payment/sagepay_us', 'extension/payment/securetrading_pp', 'extension/payment/securetrading_ws', 'extension/payment/skrill', 'extension/payment/twocheckout', 'extension/payment/web_payment_software', 'extension/payment/wechat_pay', 'extension/payment/worldpay', 'extension/report/customer_activity', 'extension/report/customer_order', 'extension/report/customer_reward', 'extension/report/customer_search', 'extension/report/customer_transaction', 'extension/report/marketing', 'extension/report/product_purchased', 'extension/report/product_viewed', 'extension/report/sale_coupon', 'extension/report/sale_order', 'extension/report/sale_return', 'extension/report/sale_shipping', 'extension/report/sale_tax', 'extension/shipping/auspost', 'extension/shipping/ec_ship', 'extension/shipping/fedex', 'extension/shipping/flat', 'extension/shipping/free', 'extension/shipping/item', 'extension/shipping/parcelforce_48', 'extension/shipping/pickup', 'extension/shipping/royal_mail', 'extension/shipping/usps', 'extension/shipping/weight', 'extension/theme/default', 'extension/total/coupon', 'extension/total/credit', 'extension/total/handling', 'extension/total/klarna_fee', 'extension/total/low_order_fee', 'extension/total/reward', 'extension/total/shipping', 'extension/total/sub_total', 'extension/total/tax', 'extension/total/total', 'extension/total/voucher');
+
+                if (
+                    $this->config->get('module_ps_demo_admin_login_status')
+                    && isset($this->request->get['route'])
+                    && !in_array($this->request->get['route'], $ps_extension_list)
+                ) {
+                    $this->load->language('extension/module/ps_demo_admin_login', 'ps_demo_admin_login');
+
+                    $ps_language = $this->language->get('ps_demo_admin_login');
+
+                    $data['ps_button_copy_url'] = $ps_language->get('button_copy_url');
+                    $data['ps_text_url_copied'] = $ps_language->get('text_url_copied');
+
+                    $data['ps_demo_url'] = $this->url->link('common/login', 'username=' . $this->config->get('module_ps_demo_admin_login_username') . '&password=' . $this->config->get('module_ps_demo_admin_login_password') . '&redirect=' . urlencode($this->url->link($this->request->get['route'])), true);
+                } else {
+                    $data['ps_demo_url'] = '';
+                }
+            ]]></add>
+        </operation>
+    </file>
+    <file path="admin/view/template/extension/*/*.twig">
+        <operation>
+            <search><![CDATA[<i class="fa fa-save"></i></button>]]></search>
+            <add position="after"><![CDATA[
+                {% if ps_demo_url %}<button type="button" data-demo-url="{{ ps_demo_url }}" data-toggle="tooltip" title="{{ ps_button_copy_url }}" class="btn btn-info btn-copy-demo-url"><i class="fa fa-share-alt"></i></button>
+                <script>
+                    function copyToClipboardLegacy(text) {
+                        var $temp = $('<textarea>');
+                        $('body').append($temp);
+                        $temp.val(text).select();
+                        document.execCommand('copy');
+                        $temp.remove();
+                    }
+
+                    function showCopyMessage() {
+                        $('.ps-alert-success').remove();
+
+                        $('#content > .container-fluid').prepend('<div class="alert alert-success alert-dismissible ps-alert-success"><i class="fa fa-check-circle"></i> {{ ps_text_url_copied }} <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    }
+
+                    $(document).ready(function() {
+                        $('.btn-copy-demo-url').on('click', function () {
+                            var copyText = $(this).attr('data-demo-url');
+
+                            if (copyText && copyText.length) {
+                                if (navigator.clipboard && navigator.clipboard.writeText) {
+                                    navigator.clipboard.writeText(copyText).then(function() { showCopyMessage(); // Try using the modern Clipboard API first
+                                    }).catch(function(err) { copyToClipboardLegacy(copyText); showCopyMessage(); });
+                                } else { // Clipboard API not available, use legacy method
+                                    copyToClipboardLegacy(copyText);
+                                    showCopyMessage();
+                                }
+                            }
+                        });
+                    });
+                </script>{% endif %}
+            ]]></add>
+        </operation>
+    </file>
+    <file path="admin/controller/common/header.php">
+        <operation>
+            <search><![CDATA[return $this->load->view('common/header', $data);]]></search>
+            <add position="before"><![CDATA[
+                $ps_banner_description = (array) $this->config->get('module_ps_demo_admin_login_banner_description');
+
+                $ps_language_id = $this->config->get('config_language_id');
+
+                $data['ps_banner_description'] = isset($ps_banner_description[$ps_language_id]) ? $ps_banner_description[$ps_language_id] : '';
+                $data['ps_banner_text_color'] = $this->config->get('module_ps_demo_admin_login_banner_text_color');
+                $data['ps_banner_background_color'] = $this->config->get('module_ps_demo_admin_login_banner_background_color');
+                $data['ps_demo_admin_login_status'] = $this->config->get('module_ps_demo_admin_login_status');
+            ]]></add>
+        </operation>
+    </file>
+    <file path="admin/view/template/common/header.twig">
+        <operation>
+            <search><![CDATA[<body>]]></search>
+            <add position="after"><![CDATA[
+                {% if ps_demo_admin_login_status %}<section style="color: {{ ps_banner_text_color }}; background-color: {{ ps_banner_background_color }}; text-align: center; display: block; padding-block: .8rem;">
+                    <p style="font-size: 1.8rem; font-weight: bold; margin: 0;">{{ ps_banner_description }}</p>
+                </section>{% endif %}
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/controller/common/header.php">
+        <operation>
+            <search><![CDATA[return $this->load->view('common/header', $data);]]></search>
+            <add position="before"><![CDATA[
+                $ps_banner_description = (array) $this->config->get('module_ps_demo_admin_login_banner_description');
+
+                $ps_language_id = $this->config->get('config_language_id');
+
+                $data['ps_banner_description'] = isset($ps_banner_description[$ps_language_id]) ? $ps_banner_description[$ps_language_id] : '';
+                $data['ps_banner_text_color'] = $this->config->get('module_ps_demo_admin_login_banner_text_color');
+                $data['ps_banner_background_color'] = $this->config->get('module_ps_demo_admin_login_banner_background_color');
+                $data['ps_demo_admin_login_status'] = $this->config->get('module_ps_demo_admin_login_status');
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/view/theme/default/template/common/header.twig">
+        <operation>
+            <search><![CDATA[<body>]]></search>
+            <add position="after"><![CDATA[
+                {% if ps_demo_admin_login_status %}<section style="color: {{ ps_banner_text_color }}; background-color: {{ ps_banner_background_color }}; text-align: center; display: block; padding-block: .8rem;">
+                    <p style="font-size: 1.8rem; font-weight: bold; margin: 0;">{{ ps_banner_description }}</p>
+                </section>{% endif %}
+            ]]></add>
+        </operation>
+    </file>
+</modification>

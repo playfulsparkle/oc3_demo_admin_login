@@ -1,0 +1,155 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+            <li><a href="#tab-support" data-toggle="tab">{{ tab_help_and_support }}</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="tab-general">
+
+							<div class="form-group">
+								<label for="input-status" class="col-sm-2 control-label">{{ entry_status }}</label>
+								<div class="col-sm-10">
+									<select name="module_ps_demo_admin_login_status" id="input-status" class="form-control">
+										{% if module_ps_demo_admin_login_status %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+										{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+
+							<fieldset id="ad-settings-group">
+								<legend>{{ text_group_account }}</legend>
+
+								<div class="form-group required">
+									<label for="input-username" class="col-sm-2 control-label">{{ entry_username }}</label>
+									<div class="col-sm-10">
+										<input type="text" name="module_ps_demo_admin_login_username" value="{{ module_ps_demo_admin_login_username }}" placeholder="{{ entry_username }}" id="input-username" class="form-control">
+										{% if error_username %}<div class="text-danger">{{ error_username }}</div>{% endif %}
+									</div>
+								</div>
+
+								<div class="form-group required">
+									<label for="input-password" class="col-sm-2 control-label">{{ entry_password }}</label>
+									<div class="col-sm-10">
+										<input type="text" name="module_ps_demo_admin_login_password" value="{{ module_ps_demo_admin_login_password }}" placeholder="{{ entry_password }}" id="input-password" class="form-control">
+										{% if error_password %}<div class="text-danger">{{ error_password }}</div>{% endif %}
+									</div>
+								</div>
+
+							</fieldset>
+
+							<fieldset id="ad-settings-group">
+								<legend>{{ text_group_banner }}</legend>
+
+								<div class="form-group">
+									<label for="input-banner-status" class="col-sm-2 control-label">{{ text_banner_status }}</label>
+									<div class="col-sm-10">
+										<select name="module_ps_demo_admin_login_banner_status" id="input-banner-status" class="form-control">
+											{% if module_ps_demo_admin_login_banner_status %}
+											<option value="1" selected="selected">{{ text_enabled }}</option>
+											<option value="0">{{ text_disabled }}</option>
+											{% else %}
+											<option value="1">{{ text_enabled }}</option>
+											<option value="0" selected="selected">{{ text_disabled }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+
+								<div class="form-group required">
+									<label class="col-sm-2 control-label">{{ entry_description }}</label>
+									<div class="col-sm-10">
+										{% for language in languages %}
+											<div class="input-group"><span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+												<input type="text" name="module_ps_demo_admin_login_banner_description[{{ language.language_id }}]" value="{{ module_ps_demo_admin_login_banner_description[language.language_id] }}" placeholder="{{ entry_description }}" class="form-control" />
+											</div>
+											{% if error_banner_description[language.language_id] %}<div class="text-danger">{{ error_banner_description[language.language_id] }}</div>{% endif %}
+										{% endfor %}
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="input-banner-text-color" class="col-sm-2 control-label">{{ entry_text_color }}</label>
+									<div class="col-sm-10">
+										<input type="color" name="module_ps_demo_admin_login_banner_text_color" value="{{ module_ps_demo_admin_login_banner_text_color }}" id="input-banner-text-color">
+										{% if error_banner_text_color %}<div class="text-danger">{{ error_banner_text_color }}</div>{% endif %}
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="input-banner-background-color" class="col-sm-2 control-label">{{ entry_text_color }}</label>
+									<div class="col-sm-10">
+										<input type="color" name="module_ps_demo_admin_login_banner_background_color" value="{{ module_ps_demo_admin_login_banner_background_color }}" id="input-banner-background-color">
+										{% if error_banner_background_color %}<div class="text-danger">{{ error_banner_background_color }}</div>{% endif %}
+									</div>
+								</div>
+
+							</fieldset>
+
+            </div>
+						<div class="tab-pane" id="tab-support">
+
+							<h3>{{ heading_contact }}</h3>
+							{{ text_contact }}
+
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+	<script>
+		$('#input-username').autocomplete({
+			'source': function(request, response) {
+				$.ajax({
+					url: 'index.php?route=extension/module/ps_demo_admin_login/user_autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+					dataType: 'json',
+					success: function(json) {
+						response($.map(json, function(item) {
+							return {
+								label: item['username'],
+								value: item['user_id']
+							}
+						}));
+					}
+				});
+			},
+			'select': function(item) {
+				$('#input-username').val(item['label']);
+			}
+		});
+	</script>
+</div>
+{{ footer }}
