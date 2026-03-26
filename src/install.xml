@@ -7,7 +7,7 @@ code package and also available on the project page: https://github.com/playfuls
 <modification>
     <name>Playful Sparkle - Demo admin login</name>
     <code>ps_demo_admin_login</code>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <author>Playful Sparkle</author>
     <link>https://github.com/playfulsparkle/oc3_demo_admin_login.git</link>
     <file path="admin/controller/common/login.php">
@@ -68,7 +68,27 @@ code package and also available on the project page: https://github.com/playfuls
                     $data['ps_button_copy_url'] = $ps_language->get('button_copy_url');
                     $data['ps_text_url_copied'] = $ps_language->get('text_url_copied');
 
-                    $data['ps_demo_url'] = $this->url->link('common/login', 'username=' . $this->config->get('module_ps_demo_admin_login_username') . '&password=' . $this->config->get('module_ps_demo_admin_login_password') . '&redirect=' . urlencode($this->url->link($this->request->get['route'])), true);
+                    if (
+                        strpos($route, '/analytics') !== 0 ||
+                        strpos($route, '/advertise') !== 0 ||
+                        strpos($route, '/theme') !== 0
+                    ) {
+                        $ps_extension_params = '&store_id=' . $this->request->get['store_id'];
+                    } else if (strpos($route, '/module') !== 0) {
+                        $ps_extension_params = '&module_id=' . $this->request->get['module_id'];
+                    } else {
+                        $ps_extension_params = '';
+                    }
+
+                    $ps_extension_url = $this->url->link($this->request->get['route'], $ps_extension_params);
+
+                    $data['ps_demo_url'] = $this->url->link(
+                        'common/login',
+                        'username=' . $this->config->get('module_ps_demo_admin_login_username') .
+                        '&password=' . $this->config->get('module_ps_demo_admin_login_password') .
+                        '&redirect=' . urlencode($ps_extension_url),
+                        true
+                    );
                 } else {
                     $data['ps_demo_url'] = '';
                 }
