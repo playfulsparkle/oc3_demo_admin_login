@@ -69,12 +69,16 @@ code package and also available on the project page: https://github.com/playfuls
                     $data['ps_text_url_copied'] = $ps_language->get('text_url_copied');
 
                     if (
-                        strpos($route, '/analytics') !== 0 ||
-                        strpos($route, '/advertise') !== 0 ||
-                        strpos($route, '/theme') !== 0
+                        isset($this->request->get['store_id']) &&
+                        (strpos($this->request->get['route'], '/analytics/') !== 0 ||
+                        strpos($this->request->get['route'], '/advertise/') !== 0 ||
+                        strpos($this->request->get['route'], '/theme/') !== 0)
                     ) {
                         $ps_extension_params = '&store_id=' . $this->request->get['store_id'];
-                    } else if (strpos($route, '/module') !== 0) {
+                    } else if (
+                        isset($this->request->get['module_id']) &&
+                        strpos($this->request->get['route'], '/module/') !== 0
+                    ) {
                         $ps_extension_params = '&module_id=' . $this->request->get['module_id'];
                     } else {
                         $ps_extension_params = '';
