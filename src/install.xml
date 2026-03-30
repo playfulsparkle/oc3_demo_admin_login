@@ -2,14 +2,14 @@
 <!--
 This file is part of "Playful Sparkle - Demo admin login" project and subject to the terms
 and conditions defined in file "LICENSE", which is part of this source
-code package and also available on the project page: https://github.com/playfulsparkle/oc3_demo_admin_login.git
+code package and also available on the project page: https://github.com/playfulsparkle/oc3_demo_admin_login
 -->
 <modification>
     <name>Playful Sparkle - Demo admin login</name>
     <code>ps_demo_admin_login</code>
     <version>1.0.1</version>
     <author>Playful Sparkle</author>
-    <link>https://github.com/playfulsparkle/oc3_demo_admin_login.git</link>
+    <link>https://github.com/playfulsparkle/oc3_demo_admin_login</link>
     <file path="admin/controller/common/login.php">
         <operation>
             <search><![CDATA[if (($this->request->server['REQUEST_METHOD'] == 'POST')]]></search>
